@@ -43,6 +43,12 @@ body {
   margin: 0;
 }
 
+.nav ul a {
+  text-decoration: none;
+  color: #d8e1ea;
+  font-size: 1em;
+}
+
 .nav ul li {
   float: right;
   height: 100%;
@@ -293,6 +299,7 @@ input:checked + .switch:active::before {
   margin-bottom: 25px;
   background: url(http://i.imgur.com/ABELaJf.jpg);
   background-size: cover;
+  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
 .map-header img {
@@ -330,6 +337,37 @@ input:checked + .switch:active::before {
   left: 50px;
   transform: translateY(-50%);
   float: left;
+}
+
+.card {
+  position: relative;
+  display: inline-block;
+  width: 750px;
+  height: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  vertical-align: top;
+  background-color: #2C3446;
+  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24);
+  margin: 0 auto;
+}
+
+.card .content {
+  width: 100%;
+  height: 100%;
+  padding: 15px 25px;
+}
+
+.card .block {
+  background-color: #312c46;
+  padding: 15px 25px;
+  margin: 0;
+}
+
+.card .title {
+  color: #FB667A;
+  font-weight: 200;
+  margin: 0;
 }
 
 .server-detail {

@@ -79,15 +79,17 @@
         $map = $row["map"];
         $gamemode = $row["mode"];
         
-        
         if($map == "riverworld") {
           $map = "valhalla";
         }
         if($map == "s3d_reactor") {
           $map = "reactor";
         }
-				echo "Server found:";
-				echo "<br>Host: " . $row["name"];
+        if($map == "s3d_turf") {
+          $map = "turf";
+        }
+				echo "<div class=\"block\"><h1 class=\"title\">Server found</h1>";
+				echo "Host: " . $row["name"] . "</div><div class=\"content\">";
 				echo "<br>players: " . $row["players"] . '/' . $row["maxPlayers"];
 				echo "<br>Local IP: " . $row["ipaddr"];
         echo "<br>Map: " . $map;
@@ -107,22 +109,31 @@
 				}
 			}
 		?>
-		<br><a href="javascript:history.back()"><i class="fa fa-caret-square-o-left fa-3x"></i></a>
     <script type="text/javascript">
       $(document).ready(function() {
         //Setup Vars
         var map = '<?php echo $map; ?>';
         var gamemode = '<?php echo $gamemode; ?>';
+        console.log("Map: " + map);
+        console.log("Gamemode: " + gamemode);
+        console.log("Log--");
         
-        if (map == "valhalla") {
-          $(".map-header").css({"background" : "url(http://i.imgur.com/XpjbO8O.jpg)","background-size" : "cover"});
+        
+        switch (map) {
+          case "valhalla":
+            $(".map-header").css({"background" : "url(http://i.imgur.com/XpjbO8O.jpg)","background-size" : "cover"});
+            break;
+          case "guardian":
+            $(".map-header").css({"background" : "url(http://i.imgur.com/pzTzmcx.jpg)","background-size" : "cover"});
+            break;
+          case "reactor":
+            $(".map-header").css({"background" : "url(http://i.imgur.com/HrcOQMR.jpg)","background-size" : "cover"});
+            break;
+          case "turf":
+            $(".map-header").css({"background" : "url(http://i.imgur.com/yOZrqi2.jpg)","background-size" : "cover"});
+            break;
         }
-        if (map == "guardian") {
-          $(".map-header").css({"background" : "(http://i.imgur.com/pzTzmcx.jpg)","background-size" : "cover"});
-        }
-        if (map == "reactor") {
-          $(".map-header").css({"background" : "(http://i.imgur.com/HrcOQMR.jpg)","background-size" : "cover"});
-        }
+        
         switch (gamemode) {
           case "slayer":
             $(".gametype-text").html("Slayer");
@@ -136,12 +147,41 @@
             $(".gametype-text").html("CTF");
             $("#gametype-icon").attr("src","http://img3.wikia.nocookie.net/__cb20090710215222/halo/images/5/59/CTF_Icon.svg");
             break;
+          case "forge":
+            $(".gametype-text").html("Forge");
+            $("#gametype-icon").attr("src","http://img4.wikia.nocookie.net/__cb20090626001402/halo/images/1/1c/Halo_Septagon.svg");
+            break;
+          case "vip":
+            $(".gametype-text").html("VIP");
+            $("#gametype-icon").attr("src","http://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Halo_%28series%29_logo.svg/250px-Halo_%28series%29_logo.svg.png");
+            break;
+          case "juggernaut":
+            $(".gametype-text").html("Juggernaut");
+            $("#gametype-icon").attr("src","http://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Halo_%28series%29_logo.svg/250px-Halo_%28series%29_logo.svg.png");
+            break;
+          case "territories":
+            $(".gametype-text").html("Territories");
+            $("#gametype-icon").attr("src","http://img3.wikia.nocookie.net/__cb20090710225544/halo/images/3/37/Territories_Icon.svg");
+            break;
+          case "koth":
+            $(".gametype-text").html("Koth");
+            $("#gametype-icon").attr("src","http://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Halo_%28series%29_logo.svg/250px-Halo_%28series%29_logo.svg.png");
+            break;
+          case "oddball":
+            $(".gametype-text").html("Oddball");
+            $("#gametype-icon").attr("src","http://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Halo_%28series%29_logo.svg/250px-Halo_%28series%29_logo.svg.png");
+            break;
+          case "assault":
+            $(".gametype-text").html("Assault");
+            $("#gametype-icon").attr("src","http://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Halo_%28series%29_logo.svg/250px-Halo_%28series%29_logo.svg.png");
+            break;
           default:
-            $(".gametype-text").html("Unknown");
-            $("#gametype-icon").attr("src","http://img2.wikia.nocookie.net/__cb20090710214445/halo/images/0/0e/Slayer_Icon.svg");
+            $(".gametype-text").html("Custom");
+            $("#gametype-icon").attr("src","http://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Halo_%28series%29_logo.svg/250px-Halo_%28series%29_logo.svg.png");
             break;
         }
       });
     </script>
+    <?php include('connect-bottom.html'); ?>
 	</body>
 </html>
