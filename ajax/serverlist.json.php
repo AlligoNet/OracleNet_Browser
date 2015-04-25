@@ -23,6 +23,13 @@
 			if(!isset($row["mode"])){
 				$row["mode"] = "null";
 			}
+			$row['name'] = strip_tags($row['name']);
+			$row['map'] = strip_tags($row['map']);
+			$row['mode'] = strip_tags($row['mode']);
+			$row['special'] = strip_tags($row['special']);
+			$row['xnkid'] = strip_tags($row['xnkid']);
+			$row['special'] = strip_tags($row['special']);
+			$row['special'] = strip_tags($row['special']);
 			array_push($rows, $row);
 		}
 		$conn->close();
