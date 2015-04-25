@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <title>OracleNet Server Browser</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <script src="js/script.js"></script>
+  </head>
+  <body>
+    <div class="nav">
+      <a class="brand-logo">OracleNet Server Browser</a>
+      <ul>
+        <li id="refresh"><a href="#">Refresh</a></li>
+        <li id="showFilter"><a href="#">Filter</a></li>
+      </ul>
+    </div>
+    <div class="nav-shadow"></div>
+    <div id="filters">
+      <h1>Filter</h1>
+      <form class="filter-form" id="filter-form">
+        <span><input onkeyup="reFilter()" type="text" name="name" placeholder="Server Name"></span>
+        <span><input onkeyup="reFilter()" type="text" name="special" placeholder="Tags"></span>
+        <span><input onkeyup="reFilter()" type="text" name="maxPing" placeholder="Max Ping"></span>
+        <span>
+          Map: 
+          <select onchange="reFilter()" type="text" name="map" id="maps">
+            <option value="All">All</option>
+          </select>
+        </span>
+        <span>
+          Gametype: 
+          <select onchange="reFilter()" type="text" name="mode" id="mode">
+            <option value="All">All</option>
+          </select>
+        </span>
+        <span>Hide Empty: 
+        <input id="hideEmpty" onclick="reFilter()" type="checkbox" hidden="hidden" name="empty"/>
+        <label for="hideEmpty" class="switch"></label>
+        </span>
+        <span>
+        Hide Full: 
+        <input id="hideFull" onclick="reFilter()" type="checkbox" hidden="hidden" name="full"/>
+        <label for="hideFull" class="switch"></label>
+        </span>
+      </form>
+    </div>
+    <div class="heading">
+      <h1>Explore Our Servers</h1>
+    </div>
+    <div class="heading-shadow"></div>
+    <!-- BEGIN SERVER TABLE -->
+    <div id="serverListDiv" class="fullWidth">
+      <table id="serverList" class="serverTable container">
+        <tbody>
+          <tr>
+            <th onclick="order(BasisEnum.NAME)">Server
+              <br>
+            </th>
+            <th onclick="order(BasisEnum.MAP)">Map
+              <br>
+            </th>
+            <th onclick="order(BasisEnum.MODE)">Gametype
+              <br>
+            </th>
+            <th onclick="order(BasisEnum.PLAYERS)">Players
+              <br>
+            </th>
+            <th onclick="order(BasisEnum.SPECIAL)">Tags
+              <br>
+            </th>
+            <th onclick="order(BasisEnum.PING)">Ping
+              <br>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
