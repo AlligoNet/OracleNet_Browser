@@ -124,12 +124,20 @@ function markSorting(cat){
 	}
 }
 
+function tableHeader(){
+	return "<tr><th onclick=\"order(BasisEnum.NAME)\">Server" + markSorting(BasisEnum.NAME) + "</th><th onclick=\"order(BasisEnum.MAP)\">Map" + markSorting(BasisEnum.MAP) + "</th><th onclick=\"order(BasisEnum.VARIANT)\">Type" + markSorting(BasisEnum.VARIANT) + "</th><th onclick=\"order(BasisEnum.PLAYERS)\">Players" + markSorting(BasisEnum.PLAYERS) + "</th><th onclick=\"order(BasisEnum.VARIANTTYPE)\">Tags" + markSorting(BasisEnum.VARIANTTYPE) + "</th><th onclick=\"order(BasisEnum.PING)\">Ping" + markSorting(BasisEnum.PING) + "</th></tr>";
+}
+
+function tableRow(server){
+	return "<tr><td onclick=&quot;ConnectorGlobal.connectCallback(" + servers[server].ip + " " + servers[server].xnaddr + " " + servers[server].xnkid + ")&quot;>" + servers[server].name + "</td><td><a href=\"#\">" + servers[server].map + "</a></td><td><a href=\"#\">" + servers[server].variant + "</a></td><td><a href=\"#\">" + servers[server].players + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].variantType + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
+}
+
 function finishRefresh(){
 	servers.sort(function(a,b){return serverSort(a,b);});
-	var contentsString = "<tr><th onclick=\"order(BasisEnum.NAME)\">Server" + markSorting(BasisEnum.NAME) + "</th><th onclick=\"order(BasisEnum.MAP)\">Map" + markSorting(BasisEnum.MAP) + "</th><th onclick=\"order(BasisEnum.VARIANT)\">Type" + markSorting(BasisEnum.VARIANT) + "</th><th onclick=\"order(BasisEnum.PLAYERS)\">Players" + markSorting(BasisEnum.PLAYERS) + "</th><th onclick=\"order(BasisEnum.VARIANTTYPE)\">Tags" + markSorting(BasisEnum.VARIANTTYPE) + "</th><th onclick=\"order(BasisEnum.PING)\">Ping" + markSorting(BasisEnum.PING) + "</th></tr>";
+	var contentsString = tableHeader();
 	for(server in servers){
 		if(!filtered(servers[server])){
-			contentsString = contentsString + "<tr><td onclick=&quot;ConnectorGlobal.connectCallback(" + servers[server].ip + " " + servers[server].xnaddr + " " + servers[server].xnkid + ")&quot;>" + servers[server].name + "</td><td><a href=\"#\">" + servers[server].map + "</a></td><td><a href=\"#\">" + servers[server].variant + "</a></td><td><a href=\"#\">" + servers[server].players + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].variantType + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
+			contentsString = contentsString + tableRow(server);
 		}
 	}
 	document.getElementById("serverList").innerHTML = contentsString;
@@ -167,8 +175,8 @@ function requestServers(){
 	request.send();	
 }
 
-function requestServerInfo(ipAddress){
-	var url = "http://" + ipAddress + ":8000/example.json"
+function requestServerInfo(server){
+	var url = "http://" + server.ip + ":" + server.port + "/example.json";
 	var request = new XMLHttpRequest();
 	
 	request.onreadystatechange=function() {
@@ -181,7 +189,7 @@ function requestServerInfo(ipAddress){
 }
 
 function refresh(){
-	document.getElementById("serverList").innerHTML = "<tr><th><i class=\"fa fa-spinner fa-pulse fa-5x\"></i></th></tr>";
+	document.getElementById("serverList").innerHTML = tableHeader();
 	requestServers();
 }
 

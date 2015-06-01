@@ -8,7 +8,7 @@
 		die("Connection failed: " . $conn->connect_error);
 	}
 	else{
-		$query = "SELECT Servers.name, Servers.map, Servers.mode, Servers.players, Servers.maxPlayers, Servers.special, Servers.ping, Servers.xnkid, Servers.lastSeen, radius.raduserpublic.public AS allowPublic FROM (Servers LEFT JOIN radius.raduserpublic ON Servers.name=radius.raduserpublic.username)";
+		$query = "SELECT ip, port FROM Servers";
 		if(isset($_GET["sub"])){
 			if($_GET["sub"] === "map"){
 				$query = "SELECT DISTINCT map FROM Servers";
@@ -20,16 +20,8 @@
 		$result = $conn->query($query);
 		$rows = array();
 		while($row = $result->fetch_assoc()){
-			if(!isset($row["mode"])){
-				$row["mode"] = "null";
-			}
-			$row['name'] = strip_tags($row['name']);
-			$row['map'] = strip_tags($row['map']);
-			$row['mode'] = strip_tags($row['mode']);
-			$row['special'] = strip_tags($row['special']);
-			$row['xnkid'] = strip_tags($row['xnkid']);
-			$row['special'] = strip_tags($row['special']);
-			$row['special'] = strip_tags($row['special']);
+			$row['ip'] = strip_tags($row['ip']);
+			$row['port'] = strip_tags($row['port']);
 			array_push($rows, $row);
 		}
 		$conn->close();
