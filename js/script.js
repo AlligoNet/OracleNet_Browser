@@ -154,7 +154,7 @@ function order(b){
 function requestServers(){
 	servers = [];
 	var request = new XMLHttpRequest();
-	var url = "ajax/serverlist.json.php"; //
+	var url = "ajax/serverlist.json"; //"ajax/serverlist.json.php"
 	
 	request.onreadystatechange=function() {
 		if (request.readyState == 4 && request.status == 200){
@@ -166,7 +166,7 @@ function requestServers(){
 }
 
 function requestServerInfo(ipAddress){
-	var url = "http://" + ipAddress + ":2449/"
+	var url = "http://" + ipAddress + ":8000/example.json"
 	var request = new XMLHttpRequest();
 	
 	request.onreadystatechange=function() {
