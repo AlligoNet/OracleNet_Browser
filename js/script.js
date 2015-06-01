@@ -1,6 +1,6 @@
 //server list
-var refreshing = false;
 var servers = [];
+var serverList = [];
 var modes = [];
 var maps = [];
 //order for sorting and sorting basis
@@ -81,21 +81,6 @@ function finishMaps(){
 	var inside = "<option value=\"\">" + "all" + "</option>";
 	for(x in maps){
     map = maps[x].map;
-    if (map == "riverworld") {
-      map = "Valhalla";
-    }
-    if (map == "s3d_turf") {
-      map = "Turf";
-    }
-    if (map == "s3d_avalanche") {
-      map = "Avalanche";
-    }
-    if (map == "s3d_edge") {
-      map = "Edge";
-    }
-    if (map == "s3d_reactor") {
-      map = "Reactor";
-    }
 		inside = inside + "<option value=\"" + map + "\">" + map + "</option>";
 	}
 	document.getElementById("maps").innerHTML = inside;
@@ -104,7 +89,6 @@ function finishMaps(){
 
 function finishModes(){
 	var inside = "<option value=\"\">" + "all" + "</option>";
-	console.log(modes);
 	for(x in modes){
 		inside = inside + "<option value=\"" + modes[x].mode + "\">" + modes[x].mode + "</option>";
 	}
@@ -112,26 +96,20 @@ function finishModes(){
 	reFilter();
 }
 
-function continueMaps(response){
-	var jsonResponse = JSON.parse(response);
-	maps = jsonResponse;
-	finishMaps();
-}
-
-function continueModes(response){
-	var jsonResponse = JSON.parse(response);
-	modes = jsonResponse;
-	finishModes();
-}
-
 function continueRefresh(response){
 	var jsonResponse = JSON.parse(response);
-	servers = jsonResponse;
+	serverList = jsonResponse;
+	for(server in serverList){
+		requestServerInfo(serverList[server]);
+	}
 	finishRefresh();
 }
 
-function continueServerInfo(response){
-	
+function continueServerInfo(response, ipAddress){
+	var jsonResponse = JSON.parse(response);
+	jsonResponse.ip = ipAddress;
+	servers.push(jsonResponse);
+	finishRefresh();
 }
 
 //up: &#9650; down: &#9660;
@@ -144,20 +122,15 @@ function markSorting(cat){
 	}
 }
 
-function finishServerInfo(){
-	
-}
-
 function finishRefresh(){
 	servers.sort(function(a,b){return serverSort(a,b);});
 	var contentsString = "<tr><th onclick=\"order(BasisEnum.NAME)\">Server" + markSorting(BasisEnum.NAME) + "</th><th onclick=\"order(BasisEnum.MAP)\">Map" + markSorting(BasisEnum.MAP) + "</th><th onclick=\"order(BasisEnum.MODE)\">Type" + markSorting(BasisEnum.MODE) + "</th><th onclick=\"order(BasisEnum.PLAYERS)\">Players" + markSorting(BasisEnum.PLAYERS) + "</th><th onclick=\"order(BasisEnum.SPECIAL)\">Tags" + markSorting(BasisEnum.SPECIAL) + "</th><th onclick=\"order(BasisEnum.PING)\">Ping" + markSorting(BasisEnum.PING) + "</th></tr>";
 	for(server in servers){
 		if(!filtered(servers[server])){
-			contentsString = contentsString + "<tr><td>" + servers[server].name + "</td><td><a href=\"#\">" + servers[server].map + "</a></td><td><a href=\"#\">" + servers[server].variant + "</a></td><td><a href=\"#\">" + servers[server].players + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].special + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
+			contentsString = contentsString + "<tr><td onclick=&quot;ConnectorGlobal.connectCallback(" + servers[server].ip + " " + servers[server].xnaddr + " " + servers[server].xnkid + ")&quot;>" + servers[server].name + "</td><td><a href=\"#\">" + servers[server].map + "</a></td><td><a href=\"#\">" + servers[server].variant + "</a></td><td><a href=\"#\">" + servers[server].players + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].special + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
 		}
 	}
 	document.getElementById("serverList").innerHTML = contentsString;
-	setTimeout( function(){ refreshing = false;}, 100);
 }
 
 function reFilter(){
@@ -179,6 +152,7 @@ function order(b){
 }
 
 function requestServers(){
+	servers = [];
 	var request = new XMLHttpRequest();
 	var url = "ajax/serverlist.json.php"; //
 	
@@ -188,62 +162,25 @@ function requestServers(){
 		}
 	}
 	request.open("GET" , url, true);
-	request.send();
-	
+	request.send();	
 }
 
-function requestServerInfo(url){
+function requestServerInfo(ipAddress){
+	var url = "http://" + ipAddress + ":2449/"
 	var request = new XMLHttpRequest();
 	
 	request.onreadystatechange=function() {
 		if (request.readyState == 4 && request.status == 200){
-			continueServerInfo(request.responseText);
+			continueServerInfo(request.responseText, ipAddress);
 		}
 	}
 	request.open("GET" , url, true);
-	request.send();
-	
-}
-
-function requestMaps(){
-	var request = new XMLHttpRequest();
-	var url = "ajax/serverlist.json.php?sub=map";
-	
-	request.onreadystatechange=function() {
-		if (request.readyState == 4 && request.status == 200){
-			continueMaps(request.responseText);
-		}
-	}
-	request.open("GET" , url, true);
-	request.send();
-	
-}
-
-function requestModes(){
-	var request = new XMLHttpRequest();
-	var url = "ajax/serverlist.json.php?sub=mode";
-	
-	request.onreadystatechange=function() {
-		if (request.readyState == 4 && request.status == 200){
-			continueModes(request.responseText);
-		}
-	}
-	request.open("GET" , url, true);
-	request.send();
-	
+	request.send();	
 }
 
 function refresh(){
-	if(refreshing){
-		alert("Please wait longer before refreshing.");
-	}
-	else{
-		refreshing = true;
-		document.getElementById("serverList").innerHTML = "<tr><th><i class=\"fa fa-spinner fa-pulse fa-5x\"></i></th></tr>";
-		requestMaps();
-		requestModes();
-		requestServers();
-	}
+	document.getElementById("serverList").innerHTML = "<tr><th><i class=\"fa fa-spinner fa-pulse fa-5x\"></i></th></tr>";
+	requestServers();
 }
 
 $(document).ready(function() {
