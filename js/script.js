@@ -130,6 +130,10 @@ function continueRefresh(response){
 	finishRefresh();
 }
 
+function continueServerInfo(response){
+	
+}
+
 //up: &#9650; down: &#9660;
 function markSorting(cat){
 	if(cat == basis){
@@ -140,28 +144,16 @@ function markSorting(cat){
 	}
 }
 
+function finishServerInfo(){
+	
+}
+
 function finishRefresh(){
 	servers.sort(function(a,b){return serverSort(a,b);});
 	var contentsString = "<tr><th onclick=\"order(BasisEnum.NAME)\">Server" + markSorting(BasisEnum.NAME) + "</th><th onclick=\"order(BasisEnum.MAP)\">Map" + markSorting(BasisEnum.MAP) + "</th><th onclick=\"order(BasisEnum.MODE)\">Type" + markSorting(BasisEnum.MODE) + "</th><th onclick=\"order(BasisEnum.PLAYERS)\">Players" + markSorting(BasisEnum.PLAYERS) + "</th><th onclick=\"order(BasisEnum.SPECIAL)\">Tags" + markSorting(BasisEnum.SPECIAL) + "</th><th onclick=\"order(BasisEnum.PING)\">Ping" + markSorting(BasisEnum.PING) + "</th></tr>";
 	for(server in servers){
 		if(!filtered(servers[server])){
-      var map = servers[server].map;
-      if (map == "riverworld") {
-        map = "Valhalla";
-      }
-      if (map == "s3d_turf") {
-        map = "Turf";
-      }
-      if (map == "s3d_avalanche") {
-        map = "Avalanche";
-      }
-      if (map == "s3d_edge") {
-        map = "Edge";
-      }
-      if (map == "s3d_reactor") {
-        map = "Reactor";
-      }
-			contentsString = contentsString + "<tr><td><a href=\"connect.php?xnkid=" + servers[server].xnkid + "\">" + servers[server].name + "</a>" + (servers[server].allowPublic? ' <i class="fa fa-link"></i>' : "") + "</td><td><a href=\"#\">" + map + "</a></td><td><a href=\"#\">" + servers[server].mode + "</a></td><td><a href=\"#\">" + servers[server].players + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].special + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
+			contentsString = contentsString + "<tr><td>" + servers[server].name + "</td><td><a href=\"#\">" + servers[server].map + "</a></td><td><a href=\"#\">" + servers[server].variant + "</a></td><td><a href=\"#\">" + servers[server].players + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].special + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
 		}
 	}
 	document.getElementById("serverList").innerHTML = contentsString;
@@ -193,6 +185,19 @@ function requestServers(){
 	request.onreadystatechange=function() {
 		if (request.readyState == 4 && request.status == 200){
 			continueRefresh(request.responseText);
+		}
+	}
+	request.open("GET" , url, true);
+	request.send();
+	
+}
+
+function requestServerInfo(url){
+	var request = new XMLHttpRequest();
+	
+	request.onreadystatechange=function() {
+		if (request.readyState == 4 && request.status == 200){
+			continueServerInfo(request.responseText);
 		}
 	}
 	request.open("GET" , url, true);
