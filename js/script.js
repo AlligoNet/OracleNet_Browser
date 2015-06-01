@@ -105,11 +105,12 @@ function continueRefresh(response){
 	finishRefresh();
 }
 
-function continueServerInfo(response, ipAddress){
+function continueServerInfo(response, server){
 	console.log(response);
 	var jsonResponse = JSON.parse(response);
 	console.log(jsonResponse);
-	jsonResponse.ip = ipAddress;
+	jsonResponse.ip = server.ip;
+	jsonResponse.httpPort = server.port;
 	servers.push(jsonResponse);
 	finishRefresh();
 }
@@ -181,7 +182,7 @@ function requestServerInfo(server){
 	
 	request.onreadystatechange=function() {
 		if (request.readyState == 4 && request.status == 200){
-			continueServerInfo(request.responseText, ipAddress);
+			continueServerInfo(request.responseText, server);
 		}
 	}
 	request.open("GET" , url, true);
