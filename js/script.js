@@ -1,14 +1,14 @@
 //server list
 var servers = [];
 var serverList = [];
-var modes = [];
+var variants = [];
 var maps = [];
 //order for sorting and sorting basis
 var reverse = true;
 var BasisEnum = {
 	NAME: 0,
 	MAP: 1,
-	MODE: 2,
+	VARIANT: 2,
 	PLAYERS: 3,
 	SPECIAL: 4,
 	PING: 5
@@ -24,8 +24,8 @@ function serverSort(a,b){
 		case BasisEnum.MAP:
 			result = a.map.localeCompare(b.map);
 		break;
-		case BasisEnum.MODE:
-			result = a.mode.localeCompare(b.mode);
+		case BasisEnum.VARIANT:
+			result = a.variant.localeCompare(b.variant);
 		break;
 		case BasisEnum.PLAYERS:
 			result = a.players - b.players;
@@ -45,7 +45,7 @@ function serverSort(a,b){
 var filters = {
 	name: "",
 	map: "",
-	mode: "",
+	variant: "",
 	excludeEmpty: false,
 	excludeFull: false,
 	special: "",
@@ -59,7 +59,7 @@ function filtered(server){
 	if(server.map.toLowerCase().search(filters.map.toLowerCase()) == -1){
 		return true;
 	}
-	if(server.mode.toLowerCase().search(filters.mode.toLowerCase()) == -1){
+	if(server.variant.toLowerCase().search(filters.variant.toLowerCase()) == -1){
 		return true;
 	}
 	if(filters.excludeEmpty && server.players == 0){
@@ -87,12 +87,12 @@ function finishMaps(){
 	reFilter();
 }
 
-function finishModes(){
+function finishVariants(){
 	var inside = "<option value=\"\">" + "all" + "</option>";
-	for(x in modes){
-		inside = inside + "<option value=\"" + modes[x].mode + "\">" + modes[x].mode + "</option>";
+	for(x in variants){
+		inside = inside + "<option value=\"" + variants[x].variant + "\">" + variants[x].variant + "</option>";
 	}
-	document.getElementById("mode").innerHTML = inside;
+	document.getElementById("variant").innerHTML = inside;
 	reFilter();
 }
 
@@ -126,7 +126,7 @@ function markSorting(cat){
 
 function finishRefresh(){
 	servers.sort(function(a,b){return serverSort(a,b);});
-	var contentsString = "<tr><th onclick=\"order(BasisEnum.NAME)\">Server" + markSorting(BasisEnum.NAME) + "</th><th onclick=\"order(BasisEnum.MAP)\">Map" + markSorting(BasisEnum.MAP) + "</th><th onclick=\"order(BasisEnum.MODE)\">Type" + markSorting(BasisEnum.MODE) + "</th><th onclick=\"order(BasisEnum.PLAYERS)\">Players" + markSorting(BasisEnum.PLAYERS) + "</th><th onclick=\"order(BasisEnum.SPECIAL)\">Tags" + markSorting(BasisEnum.SPECIAL) + "</th><th onclick=\"order(BasisEnum.PING)\">Ping" + markSorting(BasisEnum.PING) + "</th></tr>";
+	var contentsString = "<tr><th onclick=\"order(BasisEnum.NAME)\">Server" + markSorting(BasisEnum.NAME) + "</th><th onclick=\"order(BasisEnum.MAP)\">Map" + markSorting(BasisEnum.MAP) + "</th><th onclick=\"order(BasisEnum.VARIANT)\">Type" + markSorting(BasisEnum.VARIANT) + "</th><th onclick=\"order(BasisEnum.PLAYERS)\">Players" + markSorting(BasisEnum.PLAYERS) + "</th><th onclick=\"order(BasisEnum.SPECIAL)\">Tags" + markSorting(BasisEnum.SPECIAL) + "</th><th onclick=\"order(BasisEnum.PING)\">Ping" + markSorting(BasisEnum.PING) + "</th></tr>";
 	for(server in servers){
 		if(!filtered(servers[server])){
 			contentsString = contentsString + "<tr><td onclick=&quot;ConnectorGlobal.connectCallback(" + servers[server].ip + " " + servers[server].xnaddr + " " + servers[server].xnkid + ")&quot;>" + servers[server].name + "</td><td><a href=\"#\">" + servers[server].map + "</a></td><td><a href=\"#\">" + servers[server].variant + "</a></td><td><a href=\"#\">" + servers[server].players + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].special + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
@@ -139,7 +139,7 @@ function reFilter(){
 	var filterForm = document.getElementById("filter-form").elements;
 	filters.name = filterForm.namedItem("name").value;
 	filters.map = filterForm.namedItem("map").value;
-	filters.mode = filterForm.namedItem("mode").value;
+	filters.variant = filterForm.namedItem("variant").value;
 	filters.excludeEmpty = filterForm.namedItem("empty").checked;
 	filters.excludeFull = filterForm.namedItem("full").checked;
 	filters.special = filterForm.namedItem("special").value;
