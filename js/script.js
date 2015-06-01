@@ -106,7 +106,9 @@ function continueRefresh(response){
 }
 
 function continueServerInfo(response, ipAddress){
+	console.log(response);
 	var jsonResponse = JSON.parse(response);
+	console.log(jsonResponse);
 	jsonResponse.ip = ipAddress;
 	servers.push(jsonResponse);
 	finishRefresh();
