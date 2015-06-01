@@ -10,7 +10,7 @@ var BasisEnum = {
 	MAP: 1,
 	VARIANT: 2,
 	PLAYERS: 3,
-	SPECIAL: 4,
+	VARIANTTYPE: 4,
 	PING: 5
 }
 var basis = BasisEnum.NAME;
@@ -30,8 +30,8 @@ function serverSort(a,b){
 		case BasisEnum.PLAYERS:
 			result = a.players - b.players;
 		break;
-		case BasisEnum.SPECIAL:
-			result = a.special.localeCompare(b.special);
+		case BasisEnum.VARIANTTYPE:
+			result = a.variantType.localeCompare(b.variantType);
 		break;
 		case BasisEnum.PING:
 			result = b.ping - a.ping;
@@ -48,7 +48,7 @@ var filters = {
 	variant: "",
 	excludeEmpty: false,
 	excludeFull: false,
-	special: "",
+	variantType: "",
 	maxPing: 1000
 }
 
@@ -68,7 +68,7 @@ function filtered(server){
 	if(filters.excludeFull && server.players == server.maxPlayers){
 		return true;
 	}
-	if(server.special.toLowerCase().search(filters.special.toLowerCase()) == -1){
+	if(server.variantType.toLowerCase().search(filters.variantType.toLowerCase()) == -1){
 		return true;
 	}
 	if(server.ping > filters.maxPing){
@@ -126,10 +126,10 @@ function markSorting(cat){
 
 function finishRefresh(){
 	servers.sort(function(a,b){return serverSort(a,b);});
-	var contentsString = "<tr><th onclick=\"order(BasisEnum.NAME)\">Server" + markSorting(BasisEnum.NAME) + "</th><th onclick=\"order(BasisEnum.MAP)\">Map" + markSorting(BasisEnum.MAP) + "</th><th onclick=\"order(BasisEnum.VARIANT)\">Type" + markSorting(BasisEnum.VARIANT) + "</th><th onclick=\"order(BasisEnum.PLAYERS)\">Players" + markSorting(BasisEnum.PLAYERS) + "</th><th onclick=\"order(BasisEnum.SPECIAL)\">Tags" + markSorting(BasisEnum.SPECIAL) + "</th><th onclick=\"order(BasisEnum.PING)\">Ping" + markSorting(BasisEnum.PING) + "</th></tr>";
+	var contentsString = "<tr><th onclick=\"order(BasisEnum.NAME)\">Server" + markSorting(BasisEnum.NAME) + "</th><th onclick=\"order(BasisEnum.MAP)\">Map" + markSorting(BasisEnum.MAP) + "</th><th onclick=\"order(BasisEnum.VARIANT)\">Type" + markSorting(BasisEnum.VARIANT) + "</th><th onclick=\"order(BasisEnum.PLAYERS)\">Players" + markSorting(BasisEnum.PLAYERS) + "</th><th onclick=\"order(BasisEnum.VARIANTTYPE)\">Tags" + markSorting(BasisEnum.VARIANTTYPE) + "</th><th onclick=\"order(BasisEnum.PING)\">Ping" + markSorting(BasisEnum.PING) + "</th></tr>";
 	for(server in servers){
 		if(!filtered(servers[server])){
-			contentsString = contentsString + "<tr><td onclick=&quot;ConnectorGlobal.connectCallback(" + servers[server].ip + " " + servers[server].xnaddr + " " + servers[server].xnkid + ")&quot;>" + servers[server].name + "</td><td><a href=\"#\">" + servers[server].map + "</a></td><td><a href=\"#\">" + servers[server].variant + "</a></td><td><a href=\"#\">" + servers[server].players + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].special + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
+			contentsString = contentsString + "<tr><td onclick=&quot;ConnectorGlobal.connectCallback(" + servers[server].ip + " " + servers[server].xnaddr + " " + servers[server].xnkid + ")&quot;>" + servers[server].name + "</td><td><a href=\"#\">" + servers[server].map + "</a></td><td><a href=\"#\">" + servers[server].variant + "</a></td><td><a href=\"#\">" + servers[server].players + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].variantType + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
 		}
 	}
 	document.getElementById("serverList").innerHTML = contentsString;
@@ -142,7 +142,7 @@ function reFilter(){
 	filters.variant = filterForm.namedItem("variant").value;
 	filters.excludeEmpty = filterForm.namedItem("empty").checked;
 	filters.excludeFull = filterForm.namedItem("full").checked;
-	filters.special = filterForm.namedItem("special").value;
+	filters.variantType = filterForm.namedItem("variantType").value;
 	filters.maxPing = parseInt(filterForm.namedItem("maxPing").value);
 	finishRefresh();
 }
