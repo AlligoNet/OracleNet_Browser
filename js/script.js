@@ -28,7 +28,7 @@ function serverSort(a,b){
 			result = a.variant.localeCompare(b.variant);
 		break;
 		case BasisEnum.PLAYERS:
-			result = a.players - b.players;
+			result = a.numPlayers - b.numPlayers;
 		break;
 		case BasisEnum.VARIANTTYPE:
 			result = a.variantType.localeCompare(b.variantType);
@@ -62,10 +62,10 @@ function filtered(server){
 	if(server.variant.toLowerCase().search(filters.variant.toLowerCase()) == -1){
 		return true;
 	}
-	if(filters.excludeEmpty && server.players == 0){
+	if(filters.excludeEmpty && server.numPlayers == 0){
 		return true;
 	}
-	if(filters.excludeFull && server.players == server.maxPlayers){
+	if(filters.excludeFull && server.numPlayers == server.maxPlayers){
 		return true;
 	}
 	if(server.variantType.toLowerCase().search(filters.variantType.toLowerCase()) == -1){
@@ -130,7 +130,7 @@ function tableHeader(){
 }
 
 function tableRow(server){
-	return "<tr><td onclick=&quot;ConnectorGlobal.connectCallback(" + servers[server].ip + " " + servers[server].xnaddr + " " + servers[server].xnkid + ")&quot;>" + servers[server].name + "</td><td><a href=\"#\">" + servers[server].map + "</a></td><td><a href=\"#\">" + servers[server].variant + "</a></td><td><a href=\"#\">" + servers[server].players + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].variantType + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
+	return "<tr><td onclick=&quot;ConnectorGlobal.connectCallback(" + servers[server].ip + ":" + servers[server].port + " " + servers[server].xnaddr + " " + servers[server].xnkid + ")&quot;>" + servers[server].name + "</td><td><a href=\"#\">" + servers[server].map + "</a></td><td><a href=\"#\">" + servers[server].variant + "</a></td><td><a href=\"#\">" + servers[server].numPlayers + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].variantType + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
 }
 
 function finishRefresh(){
@@ -177,7 +177,7 @@ function requestServers(){
 }
 
 function requestServerInfo(server){
-	var url = "http://" + server.ip + ":" + server.port + "/example.json";
+	var url = "http://" + server.ip + ":2449/example.json";
 	var request = new XMLHttpRequest();
 	
 	request.onreadystatechange=function() {
