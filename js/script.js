@@ -105,12 +105,15 @@ function continueRefresh(response){
 	finishRefresh();
 }
 
-function continueServerInfo(response, server){
+function continueServerInfo(response, server, n){
+	var d = new Date();
+	var ping = d.getTime() - n;
 	console.log(response);
 	var jsonResponse = JSON.parse(response);
 	console.log(jsonResponse);
 	jsonResponse.ip = server.ip;
 	jsonResponse.httpPort = server.port;
+	jsonResponse.ping = ping;
 	servers.push(jsonResponse);
 	finishRefresh();
 }
@@ -177,12 +180,13 @@ function requestServers(){
 }
 
 function requestServerInfo(server){
-	var url = "http://" + server.ip + ":2449/example.json";
+	var url = "http://" + server.ip + ":8000/example.json";
 	var request = new XMLHttpRequest();
-	
+	var d = new Date();
+	var n = d.getTime();
 	request.onreadystatechange=function() {
 		if (request.readyState == 4 && request.status == 200){
-			continueServerInfo(request.responseText, server);
+			continueServerInfo(request.responseText, server, n);
 		}
 	}
 	request.open("GET" , url, true);
