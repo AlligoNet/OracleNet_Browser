@@ -11,7 +11,8 @@ var BasisEnum = {
 	VARIANT: 2,
 	PLAYERS: 3,
 	VARIANTTYPE: 4,
-	PING: 5
+	PING: 5,
+	HOST: 6
 }
 var basis = BasisEnum.NAME;
 
@@ -20,6 +21,9 @@ function serverSort(a,b){
 	switch(basis){
 		case BasisEnum.NAME:
 			result = a.name.localeCompare(b.name);
+		break;
+		case BasisEnum.HOST:
+			result = a.name.localeCompare(b.host);
 		break;
 		case BasisEnum.MAP:
 			result = a.map.localeCompare(b.map);
@@ -129,11 +133,11 @@ function markSorting(cat){
 }
 
 function tableHeader(){
-	return "<tr><th onclick=\"order(BasisEnum.NAME)\">Server" + markSorting(BasisEnum.NAME) + "</th><th onclick=\"order(BasisEnum.MAP)\">Map" + markSorting(BasisEnum.MAP) + "</th><th onclick=\"order(BasisEnum.VARIANT)\">Type" + markSorting(BasisEnum.VARIANT) + "</th><th onclick=\"order(BasisEnum.PLAYERS)\">Players" + markSorting(BasisEnum.PLAYERS) + "</th><th onclick=\"order(BasisEnum.VARIANTTYPE)\">Tags" + markSorting(BasisEnum.VARIANTTYPE) + "</th><th onclick=\"order(BasisEnum.PING)\">Ping" + markSorting(BasisEnum.PING) + "</th></tr>";
+	return "<tr><th onclick=\"order(BasisEnum.NAME)\">Server" + markSorting(BasisEnum.NAME) + "</th><th onclick=\"order(BasisEnum.HOST)\">Host" + markSorting(BasisEnum.HOST) + "</th><th onclick=\"order(BasisEnum.MAP)\">Map" + markSorting(BasisEnum.MAP) + "</th><th onclick=\"order(BasisEnum.VARIANT)\">Type" + markSorting(BasisEnum.VARIANT) + "</th><th onclick=\"order(BasisEnum.PLAYERS)\">Players" + markSorting(BasisEnum.PLAYERS) + "</th><th onclick=\"order(BasisEnum.VARIANTTYPE)\">Tags" + markSorting(BasisEnum.VARIANTTYPE) + "</th><th onclick=\"order(BasisEnum.PING)\">Ping" + markSorting(BasisEnum.PING) + "</th></tr>";
 }
 
 function tableRow(server){
-	return "<tr><td onclick=&quot;ConnectorGlobal.connectCallback(" + servers[server].ip + ":" + servers[server].port + " " + servers[server].xnaddr + " " + servers[server].xnkid + ")&quot;>" + servers[server].name + "</td><td><a href=\"#\">" + servers[server].map + "</a></td><td><a href=\"#\">" + servers[server].variant + "</a></td><td><a href=\"#\">" + servers[server].numPlayers + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].variantType + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
+	return "<tr><td onclick=&quot;ConnectorGlobal.connectCallback(" + servers[server].ip + ":" + servers[server].port + " " + servers[server].xnaddr + " " + servers[server].xnkid + ")&quot;><a href=\"#\">" + servers[server].name + "</a></td><td><a href=\"#\">" + servers[server].hostPlayer + "</a></td><td><a href=\"#\">" + servers[server].map + "</a></td><td><a href=\"#\">" + servers[server].variant + "</a></td><td><a href=\"#\">" + servers[server].numPlayers + "/" + servers[server].maxPlayers + "</a></td><td><a href=\"#\">" + servers[server].variantType + "</a></td><td><a href=\"#\">" + servers[server].ping + "</a></td></tr>";
 }
 
 function finishRefresh(){
